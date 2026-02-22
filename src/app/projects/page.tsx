@@ -1,6 +1,6 @@
 "use client";
 
-import ProjectCard from "@/components/ProjectCard";
+import ProjectCard from "@/components/ui/ProjectCard";
 import { projectCategories, projects } from "@/lib/projects";
 import { Filter, Search } from "lucide-react";
 import Link from "next/link";
@@ -18,14 +18,14 @@ const Projects = () => {
       project.title.toLowerCase().includes(searchedWord.toLowerCase()) ||
       project.description.toLowerCase().includes(searchedWord.toLowerCase()) ||
       project.technologies.some((tech) =>
-        tech.toLowerCase().includes(searchedWord.toLowerCase())
+        tech.toLowerCase().includes(searchedWord.toLowerCase()),
       );
 
     return matchesCategory && matchesSearch;
   });
 
   const featuredProjects = filteredProjects.filter(
-    (project) => project.featured
+    (project) => project.featured,
   );
   const otherProjects = filteredProjects.filter((project) => !project.featured);
 

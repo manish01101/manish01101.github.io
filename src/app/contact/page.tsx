@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 
 const Contact = () => {
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -13,7 +14,7 @@ const Contact = () => {
   });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -22,6 +23,7 @@ const Contact = () => {
     e.preventDefault();
 
     try {
+      setLoading(true);
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -38,6 +40,8 @@ const Contact = () => {
       }
     } catch (err) {
       toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -136,7 +140,7 @@ const Contact = () => {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="your@email.com"
+                  placeholder="yourmail@email.com"
                 />
               </div>
               <div>
@@ -173,15 +177,17 @@ const Contact = () => {
                   required
                   rows={5}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none"
-                  placeholder="Tell me about your project..."
+                  placeholder="What can I help you with?"
                 />
               </div>
               <button
                 type="submit"
-                className="flex items-center justify-center bg-blue-600 px-6 py-4 rounded-lg  text-md font-bold cursor-pointer transition-all duration-300 transform hover:bg-blue-700 hover:scale-103 "
+                className="flex items-center justify-center bg-blue-600 px-6 py-4 rounded-lg text-white text-md font-bold cursor-pointer transition-all duration-300 transform hover:bg-blue-700 hover:scale-103 "
               >
                 <Send className="w-5 h-5 mr-2" />
-                <span>Send Message</span>
+                <div className="w-full">
+                  {loading ? "Sending Message" : "Send Message"}
+                </div>
               </button>
             </div>
           </form>

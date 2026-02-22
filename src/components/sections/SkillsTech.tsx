@@ -29,7 +29,7 @@ import {
 
 import { FaAws, FaJava } from "react-icons/fa";
 
-export default function SkillsTech2() {
+export default function SkillsTech() {
   const categories = [
     {
       title: "Frontend Development",

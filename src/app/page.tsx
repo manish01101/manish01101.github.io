@@ -1,3 +1,4 @@
+import Certifications from "@/components/sections/Certifications";
 import Experience from "@/components/sections/Experience";
 import Hero from "@/components/sections/Hero";
 import Skills from "@/components/sections/Skills";
@@ -9,6 +10,7 @@ export default function Home() {
       <div id="skills">
         <Skills />
         <Experience />
+        <Certifications />
       </div>
     </div>
   );

@@ -14,3 +14,12 @@ export interface IProject {
 export interface IProjectCard {
   project: IProject;
 }
+
+export interface ICertificate {
+  title: string;
+  issuer: string;
+  date: string;
+  description: string;
+  tags: string[];
+  verifyUrl: string;
+}

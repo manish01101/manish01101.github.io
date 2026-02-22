@@ -7,7 +7,6 @@ Welcome to my personal portfolio website! This project showcases my skills, expe
 - [About](#about)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
-- [Getting Started](#getting-started)
 - [Folder Structure](#folder-structure)
 - [Contact](#contact)
 
@@ -27,36 +26,6 @@ This portfolio is built using [Next.js](https://nextjs.org), a React framework f
 - **Styling**: Tailwind CSS
 - **Language**: TypeScript
 - **Deployment**: Vercel
-
-## Getting Started
-
-To run this project locally, follow these steps:
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/manish01101/manish-portfolio.git
-   ```
-
-2. Navigate to the project directory:
-
-   ```bash
-   cd manish-portfolio
-   ```
-
-3. Install dependencies:
-
-   ```bash
-   npm install
-   ```
-
-4. Run the development server:
-
-   ```bash
-   npm run dev
-   ```
-
-5. Open [http://localhost:3000](http://localhost:3000) in your browser to view the site.
 
 ## Folder Structure
 
