@@ -185,7 +185,7 @@ const Contact = () => {
                 className="flex items-center justify-center bg-blue-600 px-6 py-4 rounded-lg text-white text-md font-bold cursor-pointer transition-all duration-300 transform hover:bg-blue-700 hover:scale-103 "
               >
                 <Send className="w-5 h-5 mr-2" />
-                <div className="w-full">
+                <div className="">
                   {loading ? "Sending Message" : "Send Message"}
                 </div>
               </button>

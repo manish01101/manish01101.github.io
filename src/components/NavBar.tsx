@@ -1,6 +1,6 @@
 "use client";
 
-import { Briefcase, HomeIcon, Mail, Menu, User, X } from "lucide-react";
+import { Briefcase, HomeIcon, Mail, Menu, User, X, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -14,6 +14,7 @@ const NavBar = () => {
     { href: "/", label: "Home", icon: HomeIcon },
     { href: "/about", label: "About", icon: User },
     { href: "/projects", label: "Projects", icon: Briefcase },
+    { href: "/certifications", label: "certifications", icon: ShieldCheck },
     { href: "/contact", label: "Contact", icon: Mail },
   ];
 

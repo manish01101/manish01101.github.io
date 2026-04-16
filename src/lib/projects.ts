@@ -2,16 +2,39 @@ export const projectCategories = [
   "All",
   "Full Stack",
   "Frontend",
+  "Backend",
   "Mobile",
   "AI/ML",
 ];
 export const projects = [
   {
     id: 1,
+    title: "Canvasly",
+    description:
+      "Canvasly is a real-time collaborative whiteboard application with realtime chat, built with Next.js, WebSockets, and a scalable Turborepo architecture.",
+    image: "canvasly.png",
+    technologies: [
+      "Express.js",
+      "Next.js",
+      "Websocket",
+      "Prisma ORM",
+      "Tailwind CSS",
+      "Nodemailer",
+      "Docker",
+      "Zod",
+      "Next-auth",
+    ],
+    category: "Full Stack",
+    liveUrl: "https://canvasly-web-seven.vercel.app/",
+    githubUrl: "https://github.com/manish01101/Canvasly",
+    featured: true,
+    year: "February 2026",
+  },
+  {
+    id: 2,
     title: "blogg",
     description: "A full-stack blogging platform.",
-    image:
-      "https://images.pexels.com/photos/261662/pexels-photo-261662.jpeg?auto=compress&cs=tinysrgb&w=800",
+    image: "blogg.png",
     technologies: [
       "React.js",
       "TypeScript",
@@ -28,17 +51,29 @@ export const projects = [
     year: "March 2025",
   },
   {
-    id: 2,
+    id: 3,
     title: "Game Store",
     description:
       "A responsive game discovery platform built with React, TypeScript, and Chakra UI. Features dark theme UI, genre filtering, platform selection, and sorting. Powered by a third-party REST API for dynamic game data.",
-    image:
-      "https://images.pexels.com/photos/261662/pexels-photo-261662.jpeg?auto=compress&cs=tinysrgb&w=800",
+    image: "game_store.png",
     technologies: ["React.js", "TypeScript", "Chakra UI", "REST API"],
     category: "Frontend",
-    liveUrl: "https://gamestore-lake.vercel.app",
+    liveUrl: "https://game-store-wheat-one.vercel.app/",
     githubUrl: "https://github.com/manish01101/game-store",
     featured: false,
     year: "July 2024",
+  },
+  {
+    id: 4,
+    title: "Weather App",
+    description:
+      "A small weather application that fetches current weather and simple forecasts from a public weather API. Use it to look up conditions by city or coordinates.",
+    image: "weather_app.png",
+    technologies: ["React.js", "JavaScript", "REST API"],
+    category: "Frontend",
+    liveUrl: "https://weather-app-five-eta-63.vercel.app/",
+    githubUrl: "https://github.com/manish01101/Weather-App",
+    featured: false,
+    year: "August 2024",
   },
 ];

@@ -139,7 +139,7 @@ const Projects = () => {
           </div> */}
           <div className="flex flex-wrap gap-10 justify-center">
             {otherProjects.map((project, index) => (
-              <div key={index} className="w-full md:w-[45%] lg:w-[30%]">
+              <div key={index} className="w-full md:w-[40%] ">
                 <ProjectCard project={project} />
               </div>
             ))}
