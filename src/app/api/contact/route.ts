@@ -1,16 +1,24 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-const origin = process.env.ALLOWED_ORIGIN || "*";
+function getCorsHeaders() {
+  const origin = process.env.ALLOWED_ORIGIN || "*";
+  return {
+    "Access-Control-Allow-Origin": origin,
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+  };
+}
 
 export async function POST(req: Request) {
+  const headers = getCorsHeaders();
   try {
     const { name, email, subject, message } = await req.json();
 
     if (!name || !email || !subject || !message) {
       return NextResponse.json(
         { success: false, error: "All fields are required" },
-        { status: 400 },
+        { status: 400, headers },
       );
     }
 
@@ -47,32 +55,20 @@ export async function POST(req: Request) {
 
     return NextResponse.json(
       { success: true, message: "Email sent successfully!" },
-      {
-        headers: {
-          "Access-Control-Allow-Origin": origin,
-          "Access-Control-Allow-Methods": "POST, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type",
-        },
-      },
+      { status: 200, headers },
     );
   } catch (error) {
     console.error("Error sending email:", error);
     return NextResponse.json(
       { success: false, error: "Failed to send email" },
-      { status: 500 },
+      { status: 500, headers },
     );
   }
 }
 
 export async function OPTIONS() {
-  return NextResponse.json(
-    {},
-    {
-      headers: {
-        "Access-Control-Allow-Origin": origin,
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type",
-      },
-    },
-  );
+  return new NextResponse(null, {
+    status: 204,
+    headers: getCorsHeaders(),
+  });
 }

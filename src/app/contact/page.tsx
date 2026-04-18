@@ -32,7 +32,7 @@ const Contact = () => {
 
     try {
       setLoading(true);
-      const targetUrl = `${BACKEND_URL.replace(/\/$/, "")}/api/contact`;
+      const targetUrl = `${BACKEND_URL}/api/contact`;
 
       const res = await fetch(targetUrl, {
         method: "POST",
