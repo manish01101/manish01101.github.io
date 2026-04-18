@@ -4,6 +4,9 @@ import { Mail, MapPin, Phone, Send } from "lucide-react";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
+// console.log(BACKEND_URL);
+
 const Contact = () => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -22,9 +25,16 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!BACKEND_URL) {
+      toast.error("Configuration error: API URL not found.");
+      return;
+    }
+
     try {
       setLoading(true);
-      const res = await fetch("/api/contact", {
+      const targetUrl = `${BACKEND_URL.replace(/\/$/, "")}/api/contact`;
+
+      const res = await fetch(targetUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -34,19 +44,19 @@ const Contact = () => {
 
       if (data.success) {
         toast.success("Message sent!");
-        setFormData({ name: "", email: "", subject: "", message: "" }); // reset form
+        setFormData({ name: "", email: "", subject: "", message: "" });
       } else {
         toast.error("Failed: " + data.error);
       }
     } catch (err) {
-      toast.error("Something went wrong");
+      toast.error("Could not connect to the server.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <section className="py-20 px-5 bg-gray-300">
+    <section className="py-15 px-5 bg-gray-50 min-h-[80vh]">
       <div className="max-w-6xl mx-auto sm:px-6 lg:px-8 text-center">
         <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
           Let&apos;s Work Together
@@ -55,9 +65,9 @@ const Contact = () => {
           I&apos;m always interested in new opportunities and exciting projects.
         </p>
       </div>
-      <div className="grid lg:grid-cols-2 gap-12 pt-15">
+      <div className="grid lg:grid-cols-5 gap-12 p-15">
         {/* contact info */}
-        <div className="">
+        <div className="lg:col-span-2">
           <h3 className="text-2xl font-bold  mb-8">Get in Touch</h3>
           <div className="space-y-6 mb-8">
             <div className="flex items-center">
@@ -103,14 +113,13 @@ const Contact = () => {
         </div>
 
         {/* contact form */}
-        <div className="bg-white py-10 px-5 rounded-xl">
-          <h3 className="font-bold text-2xl pb-2">Send a Message</h3>
-          <form action="" onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
+        <div className="lg:col-span-3 bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-100 font-bold ">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="space-y-1">
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="text-xs font-bold text-gray-500 uppercase"
                 >
                   Name
                 </label>
@@ -121,14 +130,14 @@ const Contact = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Your name"
+                  className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 outline-none text-sm transition-all"
+                  placeholder="Your Name"
                 />
               </div>
-              <div>
+              <div className="space-y-1">
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="text-xs font-bold text-gray-500 uppercase"
                 >
                   Email
                 </label>
@@ -139,57 +148,63 @@ const Contact = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="yourmail@email.com"
+                  className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 outline-none text-sm transition-all"
+                  placeholder="Email Address"
                 />
               </div>
-              <div>
-                <label
-                  htmlFor="subject"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Subject
-                </label>
-                <input
-                  type="text"
-                  id="subject"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="What's this about?"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="message"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows={5}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none"
-                  placeholder="What can I help you with?"
-                />
-              </div>
-              <button
-                type="submit"
-                className="flex items-center justify-center bg-blue-600 px-6 py-4 rounded-lg text-white text-md font-bold cursor-pointer transition-all duration-300 transform hover:bg-blue-700 hover:scale-103 "
-              >
-                <Send className="w-5 h-5 mr-2" />
-                <div className="">
-                  {loading ? "Sending Message" : "Send Message"}
-                </div>
-              </button>
             </div>
+
+            <div className="space-y-1">
+              <label
+                htmlFor="subject"
+                className="text-xs font-bold text-gray-500 uppercase"
+              >
+                Subject
+              </label>
+              <input
+                type="text"
+                id="subject"
+                name="subject"
+                value={formData.subject}
+                onChange={handleChange}
+                required
+                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 outline-none text-sm transition-all"
+                placeholder="Subject"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label
+                htmlFor="message"
+                className="text-xs font-bold text-gray-500 uppercase"
+              >
+                Message
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                required
+                rows={3}
+                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 outline-none text-sm transition-all resize-none"
+                placeholder="Your message..."
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full flex items-center justify-center bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white py-3 rounded-lg font-bold text-sm transition-all shadow-md active:scale-95"
+            >
+              {loading ? (
+                "Sending..."
+              ) : (
+                <>
+                  <Send className="w-4 h-4 mr-2" /> Send Message
+                </>
+              )}
+            </button>
           </form>
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 import {
   SiHtml5,
-  SiCss3,
+  SiCss,
   SiJavascript,
   SiTypescript,
   SiReact,
@@ -35,7 +35,7 @@ export default function SkillsTech() {
       title: "Frontend Development",
       skills: [
         { name: "HTML", icon: <SiHtml5 className="text-orange-500" /> },
-        { name: "CSS", icon: <SiCss3 className="text-blue-500" /> },
+        { name: "CSS", icon: <SiCss className="text-blue-500" /> },
         {
           name: "JavaScript",
           icon: <SiJavascript className="text-yellow-400" />,
