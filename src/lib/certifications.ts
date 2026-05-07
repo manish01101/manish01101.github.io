@@ -146,4 +146,38 @@ export const certifications = [
     ],
     verifyUrl: "https://coursera.org/verify/specialization/9R8ZRBH3I4L8",
   },
+  {
+    title: "Algorithms on Graphs",
+    issuer: "UC San Diego (via Coursera)",
+    date: "Sep 2025",
+    description:
+      "Explored core graph properties and traversal techniques. Mastered shortest path algorithms applicable to real-world navigational services, and minimum spanning trees used in network planning, clustering, and approximate algorithms. Applied these concepts in a Fast Shortest Routes industrial capstone project.",
+    tags: [
+      "Graph Algorithms",
+      "Graph Traversal",
+      "Shortest Path Algorithms",
+      "Minimum Spanning Trees",
+      "Network Routing",
+      "Clustering",
+      "Approximate Algorithms",
+      "Data Structures",
+    ],
+    verifyUrl: "https://coursera.org/verify/CDSIVGZ9R0FS",
+  },
+  {
+    title: "Neural Networks and Deep Learning",
+    issuer: "DeepLearning.AI (via Coursera)",
+    date: "Nov 2025",
+    description:
+      "Studied the foundational concepts of neural networks and deep learning. Built, trained, and applied fully connected deep neural networks. Implemented efficient, vectorized neural networks and identified key parameters in model architecture to prepare for developing leading-edge AI technology.",
+    tags: [
+      "Deep Learning",
+      "Neural Networks",
+      "Vectorization",
+      "Model Architecture",
+      "Artificial Intelligence",
+      "Machine Learning",
+    ],
+    verifyUrl: "https://coursera.org/verify/ABWUP5IY7CL9",
+  },
 ];
