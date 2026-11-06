@@ -1,200 +1,186 @@
 "use client";
 
+import { useCallback, useMemo, useState } from "react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
 import ProjectCard from "@/components/ui/ProjectCard";
+import ProjectLightbox from "@/components/ui/ProjectLightbox";
+import ContactCTA from "@/components/sections/ContactCTA";
+import type { IProject } from "@/lib/types";
 import { projectCategories, projects } from "@/lib/projects";
-import { Filter, Search } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
 
 const Projects = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchedWord, setSearchedWord] = useState("");
+  const [previewProject, setPreviewProject] = useState<IProject | null>(null);
+  const closePreview = useCallback(() => setPreviewProject(null), []);
 
-  const filteredProjects = projects.filter((project) => {
-    const matchesCategory =
-      selectedCategory === "All" || project.category === selectedCategory;
+  const filteredProjects = useMemo(() => {
+    const query = searchedWord.trim().toLowerCase();
 
-    const matchesSearch =
-      project.title.toLowerCase().includes(searchedWord.toLowerCase()) ||
-      project.description.toLowerCase().includes(searchedWord.toLowerCase()) ||
-      project.technologies.some((tech) =>
-        tech.toLowerCase().includes(searchedWord.toLowerCase()),
-      );
+    return projects.filter((project) => {
+      const matchesCategory =
+        selectedCategory === "All" || project.category === selectedCategory;
 
-    return matchesCategory && matchesSearch;
-  });
+      const matchesSearch =
+        query.length === 0 ||
+        project.title.toLowerCase().includes(query) ||
+        project.description.toLowerCase().includes(query) ||
+        (project.role?.toLowerCase().includes(query) ?? false) ||
+        project.technologies.some((tech) =>
+          tech.toLowerCase().includes(query),
+        );
 
-  const featuredProjects = filteredProjects.filter(
-    (project) => project.featured,
-  );
-  const otherProjects = filteredProjects.filter((project) => !project.featured);
+      return matchesCategory && matchesSearch;
+    });
+  }, [selectedCategory, searchedWord]);
 
   return (
-    <div className="bg-white min-h-screen">
-      {/* Hero Section */}
-      <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 via-white to-purple-50">
-        <div className="max-w-6xl mx-auto text-center space-y-5">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900">
-            My{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Projects
-            </span>
+    <div>
+      <section className="relative overflow-hidden border-b border-line pb-12 pt-32 text-center md:pt-40">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 overflow-hidden"
+        >
+          <div className="absolute left-1/2 top-16 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full border border-line/70 sm:h-[38rem] sm:w-[38rem]" />
+          <div className="absolute left-1/2 top-28 h-[20rem] w-[20rem] -translate-x-1/2 rounded-full border border-line/50 sm:top-32 sm:h-[28rem] sm:w-[28rem]" />
+          <div className="absolute left-1/2 top-32 h-72 w-72 -translate-x-1/2 rounded-full bg-butter/35 blur-[100px]" />
+        </div>
+
+        <div className="shell relative flex flex-col items-center">
+          <div className="flex items-center justify-center gap-3 font-mono text-[9px] uppercase tracking-[0.2em] text-muted">
+            <span className="h-px w-8 bg-line-strong" />
+            <span>Archive / 2024—2026</span>
+            <span className="h-1 w-1 rotate-45 bg-apricot" />
+            <span>08 projects</span>
+            <span className="h-px w-8 bg-line-strong" />
+          </div>
+
+          <h1 className="mt-7 font-display text-[clamp(4rem,11vw,8.5rem)] font-medium leading-[0.82] tracking-[-0.06em]">
+            All the
+            <br />
+            <span className="text-pine">work.</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            A collection of projects that showcase my skills and passion for
-            creating innovative solutions that solve real-world problems.
+
+          <p className="mt-6 max-w-xl text-balance text-base leading-relaxed text-muted">
+            Eight projects across web, mobile and realtime systems. Some are
+            client products, some are independent builds — all of them made it
+            to production.
           </p>
-          {/* search and filter  */}
-          <div className="flex flex-col md:flex-row gap-8 justify-center items-center">
-            {/* search  */}
-            {/* <div className="flex items-center gap-2 px-4 py-1 border rounded-xl border-gray-300">
-              <Search className=" text-gray-400 w-5 h-5" />
+
+          <div className="mt-7 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 font-mono text-[8px] uppercase tracking-[0.16em] text-faint">
+            <span>{String(projects.length).padStart(2, "0")} projects</span>
+            <span className="h-1 w-1 rotate-45 bg-line-strong" />
+            <span>{projectCategories.length - 1} categories</span>
+            <span className="h-1 w-1 rotate-45 bg-line-strong" />
+            <span>Curated archive</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="sticky top-16 z-40 border-b border-line bg-chalk/95 backdrop-blur-md md:top-[6.5rem]">
+        <div className="shell py-3">
+          <div className="flex flex-col items-center gap-2.5 lg:flex-row lg:justify-center lg:gap-4">
+            <div className="flex h-10 w-full max-w-md items-center gap-3 rounded-full border border-line bg-paper px-4 transition-colors focus-within:border-pine">
+              <Search className="h-4 w-4 shrink-0 text-faint" />
               <input
-                type="text"
-                placeholder="Search projects..."
-                className="w-full p-2 outline-none focus:ring-2 focus:ring-blue-500 rounded-md"
+                type="search"
+                placeholder="Search project, stack or keyword"
+                value={searchedWord}
+                onChange={(event) => setSearchedWord(event.target.value)}
+                className="h-full w-full min-w-0 bg-transparent text-sm text-ink outline-none placeholder:text-faint"
+                aria-label="Search projects"
               />
-            </div> */}
-            <div className="flex items-center gap-2 px-4 border rounded-lg border-gray-300 focus-within:ring-2 focus-within:ring-blue-500">
-              <Search className="text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="Search projects..."
-                value={searchedWord} // this will clear the current text as this binds the value
-                className="w-full p-2 outline-none"
-                onChange={(e) => setSearchedWord(e.target.value)}
-              />
+              {searchedWord && (
+                <button
+                  type="button"
+                  onClick={() => setSearchedWord("")}
+                  aria-label="Clear search"
+                  className="text-faint transition-colors hover:text-ink"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
             </div>
 
-            {/* filter */}
-            <div className="flex items-center gap-2">
-              <Filter className="w-5 h-5 text-gray-600" />
-              <div className="flex gap-2">
-                {projectCategories.map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => setSelectedCategory(category)}
-                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                      selectedCategory === category
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
+            <div className="flex w-full items-center justify-start gap-2 overflow-x-auto pb-0.5 sm:justify-center lg:w-auto lg:shrink-0 lg:pb-0">
+              <SlidersHorizontal className="hidden h-3.5 w-3.5 shrink-0 text-faint sm:block" />
+              {projectCategories.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() => setSelectedCategory(category)}
+                  className={`shrink-0 rounded-full border px-3.5 py-2 font-mono text-[8px] uppercase tracking-[0.12em] transition-colors sm:text-[9px] ${
+                    selectedCategory === category
+                      ? "border-pine bg-pine text-chalk"
+                      : "border-line text-muted hover:border-ink hover:text-ink"
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* featured projects  */}
-      {featuredProjects.length > 0 && (
-        <section className="p-16 space-y-6">
-          <div className="max-w-6xl mx-auto text-center space-y-5">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-              Featured Projects
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              {" "}
-              Highlighting some of my most impactful and innovative work.
-            </p>
+      <section className="py-8 sm:py-10">
+        <div className="shell">
+          <div className="mb-7 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 border-b border-line pb-3 font-mono text-[9px] uppercase tracking-[0.16em] text-muted sm:mb-8">
+            <span>
+              {searchedWord || selectedCategory !== "All"
+                ? "Filtered results"
+                : "The complete archive"}
+            </span>
+            <span className="h-1 w-1 rotate-45 bg-apricot" />
+            <span aria-live="polite">
+              {String(filteredProjects.length).padStart(2, "0")} /{" "}
+              {String(projects.length).padStart(2, "0")}
+            </span>
           </div>
 
-          {/* project */}
-          {/* <div className="grid lg:grid-cols-2 gap-8 justify-items-center">
-            {featuredProjects.map((project, index) => (
-              <ProjectCard key={index} project={project} />
-            ))}
-          </div> */}
-          <div className="flex flex-wrap gap-10 justify-center">
-            {featuredProjects.map((project, index) => (
-              <div key={index} className="w-full lg:w-[48%]">
-                <ProjectCard project={project} />
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* other project */}
-      {otherProjects.length > 0 && (
-        <section className="p-16 space-y-6 bg-gray-100">
-          <div className="max-w-6xl mx-auto text-center space-y-5">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-              More Projects
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              {" "}
-              Additional projects showcasing various skills and technologies.
-            </p>
-          </div>
-
-          {/* project */}
-          {/* <div className="grid lg:grid-cols-2 gap-8 justify-items-center">
-            {featuredProjects.map((project, index) => (
-              <ProjectCard key={index} project={project} />
-            ))}
-          </div> */}
-          <div className="flex flex-wrap gap-10 justify-center">
-            {otherProjects.map((project, index) => (
-              <div key={index} className="w-full md:w-[40%] ">
-                <ProjectCard project={project} />
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* No Results */}
-      {filteredProjects.length === 0 && (
-        <section className="py-20 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mx-auto text-center">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              No projects found
-            </h3>
-            <p className="text-gray-600 mb-6">
-              Try adjusting your search terms or filter criteria.
-            </p>
-            <button
-              onClick={() => {
-                setSearchedWord("");
-                setSelectedCategory("All");
-              }}
-              className="px-4 py-2 rounded-lg cursor-pointer bg-gray-200 hover:bg-gray-300"
-            >
-              Clear Filters
-            </button>
-          </div>
-        </section>
-      )}
-      {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-gray-600 to-gray-400">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Interested in Working Together?
-          </h2>
-          <p className="text-xl text-blue-100 mb-8">
-            I&apos;m always excited to take on new challenges and collaborate on
-            interesting projects.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link
-              href="/contact"
-              className="px-5 py-3 rounded-lg bg-black text-white hover:bg-gray-800 hover:scale-102 transition-all duration-200"
-            >
-              Start a Project
-            </Link>
-            <Link
-              href="/about"
-              className="px-5 py-3 rounded-lg border text-white hover:bg-white hover:text-blue-600  transition-all duration-200"
-            >
-              Learn More About Me
-            </Link>
-          </div>
+          {filteredProjects.length > 0 ? (
+            <div className="grid gap-x-6 gap-y-14 md:grid-cols-2 md:gap-x-10 md:gap-y-16">
+              {filteredProjects.map((project, position) => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  index={projects.indexOf(project)}
+                  priority={position === 0}
+                  onPreview={setPreviewProject}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="mx-auto flex max-w-lg flex-col items-center rounded-2xl border border-line bg-paper p-8 text-center sm:p-10">
+              <span className="h-2 w-2 rotate-45 bg-apricot" />
+              <p className="mt-5 font-mono text-[9px] uppercase tracking-[0.2em] text-pine">
+                No match / 00
+              </p>
+              <h2 className="mt-3 text-balance font-display text-4xl font-medium tracking-[-0.04em]">
+                Nothing here yet.
+              </h2>
+              <p className="mt-3 max-w-sm text-balance text-sm leading-relaxed text-muted">
+                No project matches that search or filter. Try a different stack,
+                or clear the filters.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchedWord("");
+                  setSelectedCategory("All");
+                }}
+                className="mt-6 inline-flex items-center gap-2 rounded-full bg-pine px-5 py-3 text-xs font-semibold text-chalk transition-colors hover:bg-apricot hover:text-ink"
+              >
+                Clear filters
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          )}
         </div>
       </section>
+
+      <ContactCTA />
+      <ProjectLightbox project={previewProject} onClose={closePreview} />
     </div>
   );
 };

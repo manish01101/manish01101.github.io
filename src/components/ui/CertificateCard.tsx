@@ -1,46 +1,59 @@
-import { FaExternalLinkAlt, FaAward } from "react-icons/fa";
-import Link from "next/link";
-import { ICertificate } from "@/lib/types";
+import { ArrowUpRight } from "lucide-react";
+import type { ICertificate } from "@/lib/types";
 
-const CertificateCard = ({ cert }: { cert: ICertificate }) => {
+interface ICertificateCard {
+  cert: ICertificate;
+  index: number;
+}
+
+const CertificateCard = ({ cert, index }: ICertificateCard) => {
   return (
-    <div className="group bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1     transition-all duration-300 flex flex-col h-full">
-      <div className="flex items-start justify-between mb-4">
-        <div className="p-3 bg-blue-50 text-blue-600 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
-          <FaAward size={24} />
-        </div>
-        <span className="text-sm font-medium text-gray-400">{cert.date}</span>
+    <article className="group flex h-full flex-col items-center rounded-2xl border border-line bg-paper p-6 text-center transition-colors hover:border-line-strong sm:p-8">
+      <div className="flex items-center justify-center gap-2 font-mono text-[8px] uppercase tracking-[0.16em] text-faint">
+        <span className="text-apricot">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+        <span className="h-1 w-1 rotate-45 bg-line-strong" />
+        <span>{cert.date}</span>
       </div>
 
-      <h3 className="text-xl font-bold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
+      <p className="mt-5 text-balance font-mono text-[8px] uppercase leading-relaxed tracking-[0.14em] text-muted">
+        {cert.issuer}
+      </p>
+      <h2 className="mt-2 text-balance font-display text-2xl font-medium leading-tight tracking-[-0.03em] transition-colors group-hover:text-pine sm:text-3xl">
         {cert.title}
-      </h3>
-      <p className="text-blue-600 font-medium text-sm mb-4">{cert.issuer}</p>
+      </h2>
 
-      <p className="text-gray-600 text-sm leading-relaxed mb-6 flex-grow">
+      <p className="mt-4 line-clamp-4 text-balance text-sm leading-relaxed text-muted">
         {cert.description}
       </p>
 
-      <div className="flex flex-wrap gap-2 mb-6">
-        {cert.tags.map((tag) => (
+      <div className="mt-5 flex flex-wrap justify-center gap-1.5">
+        {cert.tags.slice(0, 7).map((tag) => (
           <span
             key={tag}
-            className="bg-gray-50 text-gray-600 px-3 py-1 rounded-full text-xs font-semibold"
+            className="rounded-full border border-line px-2.5 py-1 font-mono text-[8px] uppercase tracking-[0.08em] text-muted"
           >
             {tag}
           </span>
         ))}
+        {cert.tags.length > 7 && (
+          <span className="rounded-full border border-line px-2.5 py-1 font-mono text-[8px] uppercase tracking-[0.08em] text-faint">
+            +{cert.tags.length - 7}
+          </span>
+        )}
       </div>
 
-      <Link
+      <a
         href={cert.verifyUrl}
         target="_blank"
-        className="inline-flex items-center justify-center space-x-2 text-sm font-bold text-gray-700 hover:text-blue-600 transition-colors pt-4 border-t border-gray-100"
+        rel="noreferrer"
+        className="mt-auto flex w-full items-center justify-center gap-2 border-t border-line pt-4 font-mono text-[9px] uppercase tracking-[0.14em] text-muted transition-colors hover:text-pine"
       >
-        <span>Verify Credential</span>
-        <FaExternalLinkAlt size={12} />
-      </Link>
-    </div>
+        Verify credential
+        <ArrowUpRight className="h-3 w-3" />
+      </a>
+    </article>
   );
 };
 

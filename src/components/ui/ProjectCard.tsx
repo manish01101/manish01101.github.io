@@ -1,68 +1,132 @@
-import { IProjectCard } from "@/lib/types";
-import Image from "next/image";
-import Link from "next/link";
-import { FaExternalLinkAlt, FaGithub } from "react-icons/fa";
+"use client";
 
-const ProjectCard = ({ project }: IProjectCard) => {
+import Image from "next/image";
+import { ArrowUpRight, Lock, Maximize2 } from "lucide-react";
+import type { IProject } from "@/lib/types";
+
+interface IProjectCard {
+  project: IProject;
+  index?: number;
+  onPreview?: (project: IProject) => void;
+  priority?: boolean;
+}
+
+const ProjectCard = ({
+  project,
+  index,
+  onPreview,
+  priority = false,
+}: IProjectCard) => {
   return (
-    <div className="group shadow-lg rounded-xl hover:scale-102 hover:shadow-2xl duration-300 ">
-      {/* image */}
-      <div className="overflow-hidden rounded-lg">
+    <article className="group flex h-full flex-col items-center text-center">
+      <button
+        type="button"
+        onClick={() => onPreview?.(project)}
+        aria-label={`Open a larger preview of ${project.title}`}
+        className="relative block aspect-[17/9] w-full overflow-hidden rounded-xl border border-line bg-sand text-left transition-colors group-hover:border-line-strong"
+      >
         <Image
           src={project.image}
-          alt={project.title}
-          width={400}
-          height={400}
-          className="w-full h-full trasition-transform duration-300 group-hover:scale-105"
-          loading="lazy"
-          unoptimized
+          alt={`${project.title} preview`}
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          loading={priority ? "eager" : "lazy"}
+          className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.025]"
         />
-      </div>
-      {/* title, desc, techused, link */}
-      <div className="p-5 space-y-4">
-        <div className="flex justify-between items-center">
-          <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-2xl text-sm font-medium">
-            {project.category}
+        {index !== undefined && (
+          <span className="absolute left-1/2 top-3 -translate-x-1/2 rounded-full bg-chalk/90 px-2.5 py-1 font-mono text-[8px] tracking-[0.16em] text-ink backdrop-blur-sm">
+            {String(index + 1).padStart(2, "0")}
           </span>
-          <span className="text-gray-500 text-sm">{project.year}</span>
+        )}
+        <span className="pointer-events-none absolute bottom-3 left-1/2 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-line/80 bg-chalk/95 px-3 py-1.5 font-mono text-[8px] uppercase tracking-[0.14em] text-ink shadow-sm backdrop-blur-sm transition-colors group-hover:border-apricot group-hover:bg-apricot">
+          <Maximize2 className="h-3 w-3" />
+          Preview
+        </span>
+      </button>
+
+      <div className="flex w-full flex-1 flex-col items-center pt-7">
+        <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 font-mono text-[8px] uppercase tracking-[0.16em] text-faint">
+          <span>{project.category}</span>
+          <span className="h-1 w-1 rotate-45 bg-apricot" />
+          <span>{project.year}</span>
+          <span className="h-1 w-1 rotate-45 bg-line-strong" />
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-1 w-1 rounded-full bg-pine" />
+            {project.liveUrl ? "Live" : "Private"}
+          </span>
         </div>
-        {/* title */}
-        <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
-          {project.title}
+
+        <h3 className="mt-2 text-balance font-display text-2xl font-medium leading-tight tracking-[-0.035em] transition-colors group-hover:text-pine sm:text-3xl">
+          {project.liveUrl ? (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {project.title}
+            </a>
+          ) : (
+            project.title
+          )}
         </h3>
-        {/* desc */}
-        <p className="text-gray-600 leading-relaxed">{project.description}</p>
-        {/* tech used */}
-        <div className="flex flex-wrap gap-2">
+
+        <p className="mt-3 line-clamp-3 max-w-md text-balance text-sm leading-relaxed text-muted">
+          {project.description}
+        </p>
+
+        <div className="mt-4 flex flex-wrap justify-center gap-1.5">
           {project.technologies.map((tech) => (
             <span
               key={tech}
-              className="bg-gray-100 text-gray-700 px-3 py-1 rounded-xl text-sm font-medium"
+              className="rounded-full border border-line px-2.5 py-1 font-mono text-[8px] uppercase tracking-[0.08em] text-muted"
             >
               {tech}
             </span>
           ))}
         </div>
-        {/* link */}
-        <div className="flex items-center space-x-4 pt-2 ">
-          <Link
-            href={project.liveUrl}
-            target="_blank"
-            className="flex justify-center items-center space-x-2 bg-blue-600 text-white px-4 py-2 font-medium rounded-lg hover:bg-blue-700 transition-all duration-300"
-          >
-            <span>Live URL </span>
-            <FaExternalLinkAlt />
-          </Link>
-          <Link
-            href={project.githubUrl}
-            target="_blank"
-            className="bg-gray-200 px-6 py-3 rounded-lg hover:bg-gray-300 transition-all duration-300"
-          >
-            <FaGithub />
-          </Link>
+
+        <div className="mt-auto flex w-full flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t border-line pt-4">
+          {project.liveUrl && (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted transition-colors hover:text-pine"
+            >
+              Live
+              <ArrowUpRight className="h-3 w-3" />
+            </a>
+          )}
+          {project.secondaryUrl && (
+            <a
+              href={project.secondaryUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted transition-colors hover:text-pine"
+            >
+              {project.secondaryLabel || "Admin"}
+              <ArrowUpRight className="h-3 w-3" />
+            </a>
+          )}
+          {project.githubUrl ? (
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted transition-colors hover:text-pine"
+            >
+              Source
+              <ArrowUpRight className="h-3 w-3" />
+            </a>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.14em] text-faint">
+              <Lock className="h-2.5 w-2.5" />
+              Private
+            </span>
+          )}
         </div>
       </div>
-    </div>
+    </article>
   );
 };
 

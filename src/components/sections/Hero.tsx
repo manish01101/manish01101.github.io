@@ -1,89 +1,83 @@
-"use client";
-
 import Link from "next/link";
-import BGAnimation from "../BGAnimation";
-import { ChevronDown } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import Seal from "@/components/ui/Seal";
+
+const stats = [
+  { value: "08", label: "Projects shipped" },
+  { value: "06", label: "Verified credentials" },
+  { value: "12+", label: "Tools in daily use" },
+  { value: "2026", label: "Latest release" },
+];
 
 const Hero = () => {
-  const scrollToAbout = () => {
-    document.getElementById("skills")?.scrollIntoView({ behavior: "smooth" });
-  };
   return (
-    <section className="min-h-screen py-20 flex  justify-center relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <BGAnimation />
+    <section className="relative overflow-hidden border-b border-line">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+      >
+        <div className="absolute left-1/2 top-[17rem] h-72 w-72 -translate-x-1/2 rounded-full bg-butter/45 blur-[110px]" />
+        <div className="absolute left-1/2 top-24 h-[30rem] w-[30rem] -translate-x-1/2 rounded-full border border-line/80 sm:top-28 sm:h-[44rem] sm:w-[44rem]" />
+        <div className="absolute left-1/2 top-36 h-[24rem] w-[24rem] -translate-x-1/2 rounded-full border border-line/60 sm:top-40 sm:h-[35rem] sm:w-[35rem]" />
+        <div className="absolute left-1/2 top-52 h-[16rem] w-[16rem] -translate-x-1/2 rounded-full border border-line/45 sm:top-56 sm:h-[24rem] sm:w-[24rem]" />
+      </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 space-y-10">
-        <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white text-4xl font-bold shadow-2xl ring-4 ring-white">
+      <div className="shell relative flex flex-col items-center pb-12 pt-28 text-center sm:pt-36 md:pb-14 md:pt-40">
+        <div className="rise flex items-center justify-center gap-3 font-mono text-[9px] uppercase tracking-[0.2em] text-muted">
+          <span className="h-px w-8 bg-line-strong" />
+          <span>Full-stack developer</span>
+          <span className="h-1 w-1 rotate-45 bg-apricot" />
+          <span>Web &amp; mobile products</span>
+          <span className="h-px w-8 bg-line-strong" />
+        </div>
+
+        <Seal
+          id="hero-seal"
+          label="INTERFACE · SYSTEMS · SHIPPING · "
+          className="rise mt-7 h-20 w-20 sm:h-24 sm:w-24"
+        />
+
+        <h1 className="rise rise-1 mt-7 font-display text-[clamp(4.4rem,14vw,9.5rem)] font-medium leading-[0.8] tracking-[-0.06em]">
           Manish
-        </div>
-        <div>
-          <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-4">
-            Hi, I&apos;m{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Manish Kumar
-            </span>
-          </h1>
-        </div>
-        <h1 className="text-2xl text-gray-600">
-          Full-stack developer passionate about building modern, scalable,
-          functional web applications that solve real-world problems and provide
-          seamless user experiences.
+          <br />
+          <span className="text-pine">Kumar</span>
+          <span className="text-apricot">.</span>
         </h1>
-        <Link
-          href="/projects"
-          className="inline-block bg-blue-600 px-6 py-4 rounded-lg text-white text-md font-medium transition-all duration-300 transform hover:bg-blue-700 hover:scale-103"
-        >
-          View My Work
-        </Link>
 
-        {/* profile */}
+        <p className="rise rise-2 mt-6 max-w-xl text-balance text-base leading-relaxed text-muted sm:text-lg">
+          I build web and mobile products end to end — from the first screen to
+          the last deploy. Considered on the surface, dependable underneath.
+        </p>
 
-        <div className="flex justify-center space-x-5">
-          <Link href={"https://github.com/manish01101"} target="_blank">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-github-icon lucide-github"
-            >
-              <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-              <path d="M9 18c-4.51 2-5-2-7-2" />
-            </svg>
+        <div className="rise rise-3 mt-8 flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
+          <Link
+            href="/projects"
+            className="group inline-flex w-full items-center justify-center gap-3 rounded-full bg-pine px-7 py-4 text-sm font-semibold text-chalk transition-colors hover:bg-apricot hover:text-ink sm:w-auto"
+          >
+            Explore the work
+            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </Link>
           <Link
-            href={"https://www.linkedin.com/in/manish01101/"}
-            target="_blank"
+            href="/contact"
+            className="group inline-flex w-full items-center justify-center gap-3 rounded-full border border-ink px-7 py-4 text-sm font-semibold transition-colors hover:bg-paper sm:w-auto"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-linkedin-icon lucide-linkedin"
-            >
-              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-              <rect width="4" height="12" x="2" y="9" />
-              <circle cx="4" cy="4" r="2" />
-            </svg>
+            Start a conversation
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </div>
-        <button
-          className="pt-10 text-gray-400 hover:text-gray-600 transition-colors duration-500 cursor-pointer"
-          onClick={scrollToAbout}
-        >
-          <ChevronDown className="w-8 h-8 animate-bounce [animation-duration:1.5s]" />
-        </button>
+
+        <div className="mt-12 grid w-full grid-cols-2 divide-y divide-line border-y border-line sm:mt-14 sm:grid-cols-4 sm:divide-x sm:divide-y-0">
+          {stats.map((stat) => (
+            <div key={stat.label} className="px-4 py-6 text-center">
+              <p className="font-display text-4xl font-medium leading-none tracking-[-0.045em] sm:text-5xl">
+                {stat.value}
+              </p>
+              <p className="mt-2 font-mono text-[8px] uppercase tracking-[0.15em] text-muted">
+                {stat.label}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -5,14 +5,18 @@ export interface IProject {
   image: string;
   technologies: string[];
   category: string;
-  liveUrl: string;
-  githubUrl: string;
-  featured: boolean;
+  liveUrl?: string;
+  githubUrl?: string;
+  secondaryUrl?: string;
+  secondaryLabel?: string;
   year: string;
+  role?: string;
+  highlights?: string[];
 }
 
 export interface IProjectCard {
   project: IProject;
+  index?: number;
 }
 
 export interface ICertificate {
